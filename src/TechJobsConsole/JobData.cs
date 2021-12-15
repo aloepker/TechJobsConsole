@@ -13,6 +13,7 @@ namespace TechJobsConsole
         public static List<Dictionary<string, string>> FindAll()
         {
             LoadData();
+            //???
             return AllJobs;
         }
 
@@ -40,7 +41,6 @@ namespace TechJobsConsole
 
         public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
         {
-            // load data, if not already loaded
             LoadData();
 
             List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
@@ -137,6 +137,46 @@ namespace TechJobsConsole
             valueBuilder.Clear();
 
             return rowValues.ToArray();
+        }
+        public static List<Dictionary<string, string>> FindByValue(string searchValue)  //a search that looks for a string in all the collums
+        {
+            LoadData();
+            List<Dictionary<string, string>> searchedJobs = new List<Dictionary<string, string>>();
+            foreach (Dictionary<string, string> row in AllJobs)   //foreach dictionary in a list : (iterates through a list of dictionaries)
+            {
+                foreach (KeyValuePair<string, string> attribute in row)   //for each thing in the dictionary, do the following
+                {
+                    //if found, compair it and add to list searchedJobs!                    
+                    if (attribute.Value.ToUpper().Contains(searchValue.ToUpper()))
+                    {
+                        //  my comparison to other values in the list 
+                        bool notAlreadyFound = true;
+                        //cycle through
+                        for (int each = 0; each < searchedJobs.Count; each++)
+                        {
+
+                            if (searchedJobs[each].Count == row.Count)
+                            {
+                                notAlreadyFound = false;
+                                foreach (KeyValuePair<string, string> pair in searchedJobs[each])
+                                {
+                                    string value;
+                                    if (row.TryGetValue(pair.Key, out value))
+                                    {
+                                        if (value != pair.Value)
+                                        {
+                                            notAlreadyFound = true;
+                                        }
+                                    }                                  
+                                }
+                            }
+                        }     
+                        if (notAlreadyFound) { searchedJobs.Add(row); }
+                    }  
+                }
+            }
+            
+            return searchedJobs;
         }
     }
 }
