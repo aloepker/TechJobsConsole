@@ -39,7 +39,7 @@ namespace TechJobsConsole
             return values;
         }
 
-        public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
+        public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)     ///  <<< corrected case sensitivity!!
         {
             LoadData();
 
@@ -49,7 +49,7 @@ namespace TechJobsConsole
             {
                 string aValue = row[column];
 
-                if (aValue.Contains(value))
+                if (aValue.ToUpper().Contains(value.ToUpper()))
                 {
                     jobs.Add(row);
                 }
